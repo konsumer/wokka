@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
+/**
+ * Simple couchapp deployment tool
+ */
+
 // fancy dep-check
 try{
-    var fs = require('fs'), path=require('path'), optimist = require('optimist'), wokka = require('./main');
+    var path=require('path'), optimist = require('optimist'), wokka = require('./main');
 }catch(e){
     console.log("Install wokka dependencies with 'npm install'.");
     process.exit(1);
@@ -59,5 +63,5 @@ if (!command || ['push', 'pull', 'watch'].indexOf(command) == -1){
 }
 
 // whew! all option-parsing done, let's do it!
-wokka[command](app, dburl, argv);
+wokka[command](app, dburl, process.cwd());
 

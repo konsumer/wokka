@@ -1,3 +1,8 @@
+/**
+ * Simple couchapp deployment tool
+ */
+
+
 // fancy dep-check
 try{
     var fs = require('fs'), path=require('path'), ugly=require('uglify-js'), toSource = require('tosource');
@@ -6,8 +11,15 @@ try{
     process.exit(1);
 }
 
+/**
+ * Turn code-strings & any javascript thing into a minified chunk of code
+ * @param  {Object} obj     String, or any other javascript object. Strings become the body of a function.
+ * @param  {Object} options uglify gen_code options + mangle & squeeze
+ * @return {String}         minified code
+ */
 function minify(obj, options){
     options = options || {"mangle":false, "squeeze":true};
+    if (typeof obj == "string") obj = new Function("", obj);
     var jsp = ugly.parser;
     var pro = ugly.uglify;
     var ast = jsp.parse(toSource(obj));
@@ -18,19 +30,32 @@ function minify(obj, options){
     return pro.gen_code(ast, options);
 }
 
-// uglify app.js (using toSource(), so it's the whole thing)
-// put attachments defined in app.js into couch
-exports.push = function(app, dburl, argv){
+/**
+ * Push code & attachments into couchdb
+ * @param  {Object} app   the app object
+ * @param  {String} dburl The couch URL
+ * @param  {String} cwd   directory to operate in
+ */
+exports.push = function(app, dburl, cwd){
     console.log(minify(app));
 };
 
-// grab app from couch, de-uglify and put in app.js
-// grab attachments and put them in dir defined in app.js
-exports.pull = function(app, dburl, argv){
+/**
+ * Pull code & attachments from couchdb
+ * @param  {Object} app   the app object
+ * @param  {String} dburl The couch URL
+ * @param  {String} cwd   directory to operate in
+ */
+exports.pull = function(app, dburl, cwd){
     console.log(arguments);
 };
 
-
-exports.watch = function(app, dburl, argv){
+/**
+ * Push code & attachments into couchdb, watch for changes
+ * @param  {Object} app   the app object
+ * @param  {String} dburl The couch URL
+ * @param  {String} cwd   directory to operate in
+ */
+exports.watch = function(app, dburl, cwd){
     console.log(arguments);
 };
