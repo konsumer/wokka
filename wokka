@@ -26,7 +26,7 @@ var argv = optimist
     })
 
     .default('couch', 'default')
-    .describe('couch', 'The deployment target couchdb, either a name specified in .ca.json, or a URL')
+    .describe('couch', 'The deployment target couchdb, either a name specified in .wokka.json, or a URL')
     .alias('couch', 'c')
     .check(function(argv){
         if (argv.couch.substr(0, 4) != 'http'){

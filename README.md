@@ -62,7 +62,7 @@ This will watch for file changes, and push your app into a local couch db named 
 
 ## Targets
 
-Targets make it easier to remember the syntax. You don't have to rememebr the URLs of your [couchdb][couchdb]s. They are optional, but save me lots of time/mistakes.
+Targets make it easier to remember the syntax. You don't have to rememebr the URLs of your [couchdb][couchdb]s. They are optional, but save me lots of time/mistakes, I'm sure.
 
 Edit your projects .wokka.json to look like this:
 
@@ -74,7 +74,7 @@ Edit your projects .wokka.json to look like this:
         }
     }
 
-This will make the default target your local [couchdb][couchdb]. To push your app, put this:
+This will make the default target your local [couchdb][couchdb]. To push your app, do this:
 
     wokka push
 
