@@ -13,10 +13,20 @@ try{
 }
 
 // fancy CLI-options
-var config, dburl, app;
+
 var pkg = require(path.join(__dirname,'package.json'));
+
+var usage = pkg.name + " (v " + pkg.version + ")" + "\n" + pkg.description + "\n\nUsage: $0 [options]";
+usage += " COMMAND\n\n";
+
+usage += "Where COMMAND is one of:\n";
+usage += "  push - put your app in a couchdb\n";
+usage += "  pull - get your app out of a couchdb, and put it in your app file\n";
+usage += "  watch - push app, then watch for local file changes, and keep pushing it";
+
+var config, dburl, app;
 var argv = optimist
-    .usage(pkg.name + " (v " + pkg.version + ")" + "\n" + pkg.description + "\n\nUsage: $0 [options] COMMAND\n\nWhere COMMAND is one of:\n  push - put your app in a couchdb\n  pull - get your app out of a couchdb, and put it in your app file\n  watch - push app, then watch for local file changes, and keep pushing it")
+    .usage(usage)
 
     .boolean('help')
     .describe('help', 'This help message')
