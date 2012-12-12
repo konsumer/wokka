@@ -98,7 +98,7 @@ You can add any targets you want, just make them like default. Here is a more co
         }
     }
 
-On [cloudant][cloudant], I make the databases, and I'm all set!
+On [cloudant][cloudant], I make the (free!) databases, and I'm all set!
 
 Now, you can deploy to a shared-dev (show other project members what you are working on) environment with this command:
 
