@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+
+// fancy dep-check
+try{
+    var fs = require('fs'), path=require('path'), optimist = require('optimist'), wokka = require('./main');
+}catch(e){
+    console.log("Install wokka dependencies with 'npm install'.");
+    process.exit(1);
+}
+
+// fancy CLI-options
+var config, dburl, app;
+var pkg = require(path.join(__dirname,'package.json'));
+var argv = optimist
+    .usage(pkg.name + " (v " + pkg.version + ")" + "\n" + pkg.description + "\n\nUsage: $0 [options] COMMAND\n\nWhere COMMAND is one of:\n  push - put your app in a couchdb\n  pull - get your app out of a couchdb, and put it in your app file\n  watch - push app, then watch for local file changes, and keep pushing it")
+
+    .boolean('help')
+    .describe('help', 'This help message')
+    .alias('help', 'h')
+    .alias('help', '?')
+    .check(function(argv){
+        if (argv.help){
+            optimist.showHelp();
+            process.exit();
+        }
+    })
+
+    .default('couch', 'default')
+    .describe('couch', 'The deployment target couchdb, either a name specified in .ca.json, or a URL')
+    .alias('couch', 'c')
+    .check(function(argv){
+        if (argv.couch.substr(0, 4) != 'http'){
+            try{
+                config = require(path.join(process.cwd(), '.wokka.json'));
+                dburl = config.target[argv.couch].db;
+                if (!dburl) throw("target does not exist in " + path.join(process.cwd(), '.wokka.json') + ".");
+            }catch(e){
+                throw(e + "\nTarget does not have http in beginning, and no proper .wokka.json file. Cowardly quitting.");
+            }
+        }else{
+            dburl = argv.couch;
+        }
+    })
+
+    .default('app', 'app.js')
+    .describe('app', 'The main entry-point javascript file for your couchapp.')
+    .alias('app', 'a')
+    .check(function(argv){
+        app = require(path.join(process.cwd(), argv.app));
+    })
+
+    .argv;
+
+// fancy commands!
+var command = argv['_'][0];
+if (!command || ['push', 'pull', 'watch'].indexOf(command) == -1){
+    optimist.showHelp();
+    process.exit(1);
+}
+
+// whew! all option-parsing done, let's do it!
+wokka[command](app, dburl, argv);
+

@@ -1,0 +1,12 @@
+{
+  "name": "wokka_example_simple",
+  "version": "0.0.1",
+  "description": "Simple wokka example couchapp",
+  "private": true,
+  "scripts": {
+    "start": "wokka watch"
+  },
+  "devDependencies": {
+    "wokka": ""
+  }
+}

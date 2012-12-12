@@ -1,0 +1,15 @@
+{
+  "name": "wokka",
+  "version": "0.0.1",
+  "description": "Simple couchapp deployment tool",
+  "main": "main.js",
+  "bin": {
+    "wokka": "wokka"
+  },
+  "dependencies": {
+    "optimist": "~0.3.5",
+    "watch": "~0.5.1",
+    "uglify-js": "",
+    "tosource": ""
+  }
+}
