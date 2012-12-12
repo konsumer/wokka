@@ -87,16 +87,18 @@ You can add any targets you want, just make them like default. Here is a more co
                 "db": "http://0.0.0.0:5984/wokka_app"
             },
             "dev": {
-                "db": "https://konsumer.cloudant.com/wokka_app_development"
+                "db": "https://konsumer:SECRET@konsumer.cloudant.com/wokka_app_development"
             },
             "int": {
-                "db": "https://konsumer.cloudant.com/wokka_app_integration"
+                "db": "https://konsumer:SECRET@konsumer.cloudant.com/wokka_app_integration"
             }
             "prod": {
-                "db": "https://konsumer.cloudant.com/wokka_app_production"
+                "db": "https://konsumer:SECRET@konsumer.cloudant.com/wokka_app_production"
             }
         }
     }
+
+On [cloudant][cloudant], I make the databases, and I'm all set!
 
 Now, you can deploy to a shared-dev (show other project members what you are working on) environment with this command:
 
