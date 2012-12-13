@@ -43,9 +43,7 @@ function getdb(dburl, callback){
  * @param  {Function} callback called when all attachments are loaded: function(attachments)
  */
 exports.attach = function(dir, callback){
-    console.log('attaching.');
     var attachments = {};
-
     var worker = function(name, file, icallback){
         var body = fs.readFileSync(file);
         attachments[name] = {
@@ -86,19 +84,15 @@ exports.attach = function(dir, callback){
  * @param  {String} cwd   directory to operate in
  */
 exports.push = function(app, dburl, cwd){
-    console.log('pushing.');
     var db = getdb(dburl, function(err, db){
         if (err) throw(err);
         var doc = _.extend({}, app);
         delete doc.attachments;
         if (app.attachments){
             exports.attach(path.join(cwd, app.attachments), function(attachments){
-                console.log('attached.');
-                app['_attachments'] = attachments;
-                console.log('saving.');
+                doc['_attachments'] = attachments;
                 db.save(app['_id'], doc, function(err, res){
                     if (err) throw(err.error + ' : ' + err.reason);
-                    console.log('saved.');
                 });
             });
         }else{
