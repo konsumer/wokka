@@ -72,6 +72,6 @@ if (!command || ['push', 'pull', 'watch'].indexOf(command) == -1){
     process.exit(1);
 }
 
-// whew! all option-parsing done, let's do it!
-wokka[command](app, dburl, process.cwd());
+// whew! all option-parsing done, let's do this!
+wokka[command](app, dburl, process.cwd(), argv);
 
