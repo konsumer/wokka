@@ -11,6 +11,7 @@ try{
         _ = require('cloneextend'),
         wrench = require("wrench"),
         cradle = require('cradle'),
+        watchr = require('watchr'),
         mime = require('mime');
 }catch(e){
     console.log("Install wokka dependencies with 'npm install'.");
@@ -24,7 +25,7 @@ try{
  */
 function getdb(dburl, callback){
     var u = url.parse(dburl);
-    var db = new(cradle.Connection)(u.protocol + '//' + u.hostname, u.port).database(u.path.slice(1));
+    var db = new(cradle.Connection)(u.protocol + '//' + u.hostname, u.port, {cache:false, raw:true}).database(u.path.slice(1));
     db.exists(function (err, exists) {
         if (!exists){
             db.create(function(res){
@@ -42,16 +43,15 @@ function getdb(dburl, callback){
  * @param  {Function} callback called when all attachments are loaded: function(attachments)
  */
 exports.attach = function(dir, callback){
+    console.log('attaching.');
     var attachments = {};
 
     var worker = function(name, file, icallback){
-        fs.readFile(file, function(err, body){
-            attachments[name] = {
-                'content_type': mime.lookup(path.join(dir, file)),
-                'data': body.toString('base64')
-            };
-            icallback();
-        });
+        attachments[name] = {
+            'content_type': mime.lookup(path.join(dir, file)),
+            'data': fs.readFileSync(file).toString('base64')
+        };
+        icallback();
     };
 
     fs.stat(dir, function(err, stats){
@@ -63,16 +63,10 @@ exports.attach = function(dir, callback){
                 fs.stat(path.join(dir, file), function(err, stats){
                     if (stats.isFile() && path.basename(file)[0] != '.'){
                         worker(file, path.join(dir, file), function(){
-                            i++;
-                            if (i == files.length){
-                                callback(attachments);
-                            }
+                            i++; if (i == files.length) callback(attachments);
                         });
                     }else{
-                        i++;
-                        if (i == files.length){
-                            callback(attachments);
-                        }
+                        i++; if (i == files.length) callback(attachments);
                     }
                 });
             });
@@ -88,19 +82,34 @@ exports.attach = function(dir, callback){
  * Push app into couchdb
  * @param  {Object} app   the app object
  * @param  {String} dburl the couch URL
+ * @param  {String} cwd   directory to operate in
  */
-exports.push = function(app, dburl){
+exports.push = function(app, dburl, cwd){
+    console.log('pushing.');
     var db = getdb(dburl, function(err, db){
         if (err) throw(err);
         var doc = _.extend({}, app);
-        db.save(app['_id'], doc, function(err, res){
-            if (err) throw(err.error + ' : ' + err.reason);
-        });
+        delete doc.attachments;
+        if (app.attachments){
+            exports.attach(path.join(cwd, app.attachments), function(attachments){
+                console.log('attached.');
+                app['_attachments'] = attachments;
+                console.log('saving.');
+                db.save(app['_id'], doc, function(err, res){
+                    if (err) throw(err.error + ' : ' + err.reason);
+                    console.log('saved.');
+                });
+            });
+        }else{
+            db.save(app['_id'], doc, function(err, res){
+                if (err) throw(err.error + ' : ' + err.reason);
+            });
+        }
     });
 };
 
 /**
- * Pull code & attachments from couchdb
+ * Pull app from couchdb
  * @param  {Object} app   the app object
  * @param  {String} dburl the couch URL
  * @param  {String} cwd   directory to operate in
@@ -117,11 +126,27 @@ exports.pull = function(app, dburl, cwd){
 };
 
 /**
- * Push code & attachments into couchdb, watch for changes
+ * Push app into couchdb, watch for changes
  * @param  {Object} app   the app object
  * @param  {String} dburl the couch URL
  * @param  {String} cwd   directory to operate in
  */
 exports.watch = function(app, dburl, cwd){
-    console.log(arguments);
+    console.log('Watching ', cwd);
+    exports.push(app, dburl);
+
+    var file;
+
+    // Watch a directory or file
+    watchr.watch({
+        path: cwd,
+        ignoreHiddenFiles: true,
+        listener: function(eventName,filePath,fileCurrentStat,filePreviousStat){
+            console.log('updating.');
+            exports.push(app, dburl);
+        },
+        next: function(err,watcher){
+            if (err)  throw err;
+        }
+    });
 };

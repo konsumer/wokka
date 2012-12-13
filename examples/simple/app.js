@@ -1,5 +1,3 @@
-var wokka = require('../../../wokka'), path = require('path');
-
 var app = {
     "_id": '_design/app',
     "rewrites": [{
@@ -38,11 +36,10 @@ app.validate_doc_update = function(newDoc, oldDoc, userCtx) {
     }
 };
 
-wokka.attach(path.join(__dirname, 'pub'), function(attachments){
-    app['_attachments'] = attachments;
-});
 
-// for a super simple index.html + app file:
-// wokka.attach(path.join(__dirname, 'index.html'), function(attachments){ app['_attachments'] = attachments; });
+app.attachments = 'pub';
+
+// for a super simple index.html-only app:
+// app.attachments = 'index.html';
 
 module.exports = app;

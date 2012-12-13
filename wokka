@@ -6,7 +6,9 @@
 
 // fancy dep-check
 try{
-    var path=require('path'), optimist = require('optimist'), wokka = require('./main');
+    var path = require('path'),
+        optimist = require('optimist'),
+        wokka = require('./main');
 }catch(e){
     console.log("Install wokka dependencies with 'npm install'.");
     process.exit(1);
