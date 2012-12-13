@@ -25,6 +25,11 @@ try{
  */
 function getdb(dburl, callback){
     var u = url.parse(dburl);
+
+    if (u.auth){
+        u.hostname = u.auth + '@' + u.hostname;
+    }
+
     var db = new(cradle.Connection)(u.protocol + '//' + u.hostname, u.port, {cache:false, raw:true}).database(u.path.slice(1));
     db.exists(function (err, exists) {
         if (!exists){

@@ -1,15 +1,25 @@
 {
   "name": "wokka",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "license": "MIT",
   "description": "Simple couchapp deployment tool",
   "main": "main.js",
+   "repository": {
+    "type": "git",
+    "url": "https://github.com/konsumer/wokka.git"
+  },
+  "keywords": [
+    "couchapp",
+    "couch",
+    "couchdb",
+    "easy",
+    ""
+  ],
   "bin": {
     "wokka": "wokka"
   },
   "dependencies": {
-    "optimist": "~0.3.5",
-    "watch": "~0.5.1",
-    "tosource": "",
+    "optimist": "",
     "wrench": "",
     "mime":"",
     "cloneextend":"",
