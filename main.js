@@ -47,9 +47,10 @@ exports.attach = function(dir, callback){
     var attachments = {};
 
     var worker = function(name, file, icallback){
+        var body = fs.readFileSync(file);
         attachments[name] = {
             'content_type': mime.lookup(path.join(dir, file)),
-            'data': fs.readFileSync(file).toString('base64')
+            'data': body.toString('base64')
         };
         icallback();
     };
