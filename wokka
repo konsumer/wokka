@@ -62,7 +62,18 @@ var argv = optimist
     .describe('app', 'The main entry-point javascript file for your couchapp.')
     .alias('app', 'a')
     .check(function(argv){
-        app = require(path.join(process.cwd(), argv.app));
+        if (argv['_'] != 'pull' ){
+            app = require(path.join(process.cwd(), argv.app));
+        }
+    })
+
+    .default('id', '_design/app')
+    .describe('id', 'The ID of the app document, for pull')
+    .alias('id', 'i')
+    .check(function(argv){
+        if (argv['_'] != 'pull' && argv.id != '_design/app'){
+            throw("id is only relevant to pull command.");
+        }
     })
 
     .argv;
@@ -74,6 +85,7 @@ if (!command || ['push', 'pull', 'watch'].indexOf(command) == -1){
     process.exit(1);
 }
 
+// tell me the URL
 if (command=='watch' || command=='push'){
     var url = dburl + "";
     if (url[url.length-1] != '/'){
@@ -97,6 +109,8 @@ if (command=='watch' || command=='push'){
 
     // figure out URL based on db config, rewrites, index.html
     console.log("You can visit your application here: " + url);
+}else{
+    app = {'_id': argv.id};
 }
 
 // whew! all option-parsing done, let's do this!

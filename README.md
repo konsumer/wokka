@@ -113,6 +113,13 @@ And to production website (the [couchdb][couchdb] with the domain vhost stuff se
     wokka push prod
 
 
+## Pull
+
+Once you have your app deployed somewhere, you can get it back into files with this command:
+
+    wokka pull -c http://0.0.0.0:5984/wokka_example_simple
+
+
 [couchapp]: https://github.com/mikeal/node.couchapp.js
 [kanso]: http://kan.so/
 [couchapp]: http://kan.so/

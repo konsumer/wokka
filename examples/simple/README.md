@@ -1,6 +1,6 @@
 # Wokka Example: Simple
 
-This is a simple example of wokka usage.
+This is a simple example of wokka usage. You can use it as a bootstrap for your own simple project.
 
 To install dependencies, type `npm install`
 

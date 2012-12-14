@@ -12,7 +12,7 @@ try{
         wrench = require("wrench"),
         cradle = require('cradle'),
         watchr = require('watchr'),
-        UglifyJS = require('uglify-js'),
+        jsbeautifier = require('js-beautify'),
         mime = require('mime');
 }catch(e){
     console.log("Install wokka dependencies with 'npm install'.");
@@ -31,7 +31,7 @@ function getdb(dburl, callback){
         u.hostname = u.auth + '@' + u.hostname;
     }
 
-    var db = new(cradle.Connection)(u.protocol + '//' + u.hostname, u.port, {cache:false, raw:true}).database(u.path.slice(1));
+    var db = new(cradle.Connection)(u.protocol + '//' + u.hostname, u.port).database(u.path.slice(1));
     db.exists(function (err, exists) {
         if (!exists){
             db.create(function(res){
@@ -118,10 +118,23 @@ exports.push = function(app, dburl, cwd){
 exports.pull = function(app, dburl, cwd){
     var db = getdb(dburl, function(err, db){
         if (err) throw(err);
+        console.log('Retrieving ' + dburl + app['_id']);
         db.get(app['_id'], function(err, doc){
-            attachments = _.extend({}, doc['_attachments']);
-            delete doc['_attachments'];
+            if (err) throw(err.error + ' : ' + err.reason);
             console.log(doc);
+            var cfg = {
+                "target": {
+                    "default": {
+                        "db": dburl
+                    }
+                }
+            };
+            fs.writeFile(path.join(cwd, '.wokka.json'), jsbeautifier.js_beautify(JSON.stringify(cfg)), function(){
+                console.log('.wokka.json written');
+            });
+            fs.writeFile(path.join(cwd, 'app.js'), jsbeautifier.js_beautify(JSON.stringify(doc)), function(){
+                console.log('.wokka.json written');
+            });
         });
     });
 };
