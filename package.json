@@ -24,6 +24,7 @@
     "mime":"",
     "cloneextend":"",
     "cradle":"",
-    "watchr":""
+    "watchr":"",
+    "uglify-js":""
   }
 }

@@ -74,6 +74,31 @@ if (!command || ['push', 'pull', 'watch'].indexOf(command) == -1){
     process.exit(1);
 }
 
+if (command=='watch' || command=='push'){
+    var url = dburl + "";
+    if (url[url.length-1] != '/'){
+        url += '/';
+    }
+
+    url += app['_id'] + '/';
+
+    var hit=false;
+    app.rewrites.forEach(function(r){
+        if (r.from == '/'){
+            hit = true;
+        }
+    });
+
+    if (!hit){
+        url += 'index.html';
+    }else{
+        url += '_rewrite/';
+    }
+
+    // figure out URL based on db config, rewrites, index.html
+    console.log("You can visit your application here: " + url);
+}
+
 // whew! all option-parsing done, let's do this!
 wokka[command](app, dburl, process.cwd(), argv);
 

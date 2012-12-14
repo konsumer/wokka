@@ -12,6 +12,7 @@ try{
         wrench = require("wrench"),
         cradle = require('cradle'),
         watchr = require('watchr'),
+        UglifyJS = require('uglify-js'),
         mime = require('mime');
 }catch(e){
     console.log("Install wokka dependencies with 'npm install'.");
