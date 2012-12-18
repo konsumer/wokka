@@ -6,7 +6,7 @@ Simple couchapp deployment tool
 
 ## Motivation
 
-I love [couchapp][couchapp] & [kanso][kanso], but I was annoyed with being forced into [couchapp][couchapp]/[kanso][kanso] paradigms, file-layouts & ideas.  I want to just make a design doc that has all the stuff in it, in files layed-out like a node app, and not have to do too much to get it pushed into a [couchdb][couchdb]. I also want targets, so I can push code to different [couchdb][couchdb]s easily, and store my settings in non-version-tracked config files. I want t tool taht levareages other people's work, so the featureas and bug-fixes for the individual parts have a wide community, and better support. I want to be able to make single-file quickie-apps, and 1000-file apps the same way. Let's do this!
+I love [couchapp][couchapp] & [kanso][kanso], but I was annoyed with being forced into [couchapp][couchapp]/[kanso][kanso] paradigms, file-layouts & ideas.  I want to just make a design doc that has all the stuff in it, in files layed-out like a node app, and not have to do too much to get it pushed into a [couchdb][couchdb]. I also want targets, so I can push code to different [couchdb][couchdb]s easily, and store my settings in non-version-tracked config files. I want a tool that levarages other people's work, so the features and bug-fixes for the individual parts have a wide community, and better support. I want to be able to make single-file quickie-apps, and 1000-file apps the same way. Let's do this!
 
 ## Couchapp?
 

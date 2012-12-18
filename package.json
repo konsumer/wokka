@@ -25,6 +25,7 @@
     "cloneextend":"",
     "cradle":"",
     "watchr":"",
-    "js-beautify":""
+    "js-beautify":"",
+    "tosource":""
   }
 }

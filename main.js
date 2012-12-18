@@ -13,6 +13,7 @@ try{
         cradle = require('cradle'),
         watchr = require('watchr'),
         jsbeautifier = require('js-beautify'),
+        toSource = require('tosource'),
         mime = require('mime');
 }catch(e){
     console.log("Install wokka dependencies with 'npm install'.");
@@ -110,7 +111,7 @@ exports.push = function(app, dburl, cwd){
 };
 
 /**
- * Pull app from couchdb
+ * Pull app from couchdb - not ready for primetime...
  * @param  {Object} app   the app object
  * @param  {String} dburl the couch URL
  * @param  {String} cwd   directory to operate in
@@ -132,7 +133,21 @@ exports.pull = function(app, dburl, cwd){
             fs.writeFile(path.join(cwd, '.wokka.json'), jsbeautifier.js_beautify(JSON.stringify(cfg)), function(){
                 console.log('.wokka.json written');
             });
-            fs.writeFile(path.join(cwd, 'app.js'), jsbeautifier.js_beautify(JSON.stringify(doc)), function(){
+
+            // TODO: get attachments
+
+            delete doc['_attachments'];
+            delete doc['_rev'];
+
+
+            // find functions
+            for (var i in doc){
+                if (typeof doc[i] == 'string' && doc[i].substr(0,8) == 'function'){
+                    doc[i] = new Function('', 'return ' + doc[i] + ';')();
+                }
+            }
+
+            fs.writeFile(path.join(cwd, 'app.js'), jsbeautifier.js_beautify('module.exports=' + toSource(doc) + ';'), function(){
                 console.log('.wokka.json written');
             });
         });

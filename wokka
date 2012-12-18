@@ -23,7 +23,7 @@ usage += " COMMAND\n\n";
 
 usage += "Where COMMAND is one of:\n";
 usage += "  push - put your app in a couchdb\n";
-usage += "  pull - get your app out of a couchdb, and put it in your app file\n";
+// usage += "  pull - get your app out of a couchdb, and put it in your app file\n";
 usage += "  watch - push app, then watch for local file changes, and keep pushing it";
 
 var config, dburl, app;
